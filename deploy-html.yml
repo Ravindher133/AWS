@@ -1,0 +1,19 @@
+- name: Deploy HTML web app with Docker
+  hosts: ec2-54-171-212-49.eu-west-1.compute.amazonaws.com
+  become: yes
+
+  tasks:
+    - name: Copy HTML and Dockerfile to ec2
+      copy:
+      src: /mnt/c/Users/aravi/OneDrive/Desktop/devops-assigment/Dockerfile/
+      dest: /home/ec2-user/webapp/
+      mode: 0755
+
+    - name: Build Docker image
+      command: docker build -t myhtmlapp .
+      args:
+        chdir: /home/ec2-user/webapp
+
+    - name: Run Docker container
+      command: docker run -d -p 80:80 myhtmlapp
+      ignore_errors: yes
